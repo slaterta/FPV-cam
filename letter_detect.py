@@ -4,51 +4,15 @@ import cv2
 import pymeanshift as pms
 from pyimagesearch import imutils
 from matplotlib import pyplot as plt
-'''
-def index_letter(letter):
-	
-	return index
-	
-def img_process(img, rect):
+import os
 
-	
-			
-
-			orig = img.copy()
-			cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)
-			cv2.imshow("orig", img)
-			
-			
-			
-			cv2.rectangle(mask,(x,y),(x+w,y+h),(255,0,0),2)
-			cv2.imshow("Masked", cv2.bitwise_and(orig, orig, mask))
-
-
-	# Initiate FAST object with default values
-	fast = cv2.FastFeatureDetector()
-
-	# find and draw the keypoints
-	kp = fast.detect(edged,None)
-	img2 = cv2.drawKeypoints(edged, kp, color=(255,0,0))
-	
-	#fast_false
-	fast.setBool('nonmaxSuppression',0)
-	kp = fast.detect(edged,None)
-	img3 = cv2.drawKeypoints(edged, kp, color=(255,0,0))
-	'''
-	#plt.imshow(img),plt.colorbar(),plt.show()
-	#if len(mask) != 0:
-	
-		
-		
-	
-	
-	#cv2.imshow('img', img3)
-	
-
+def centre_letter(letter_in):
+	for (x,y,w,h) in letter_in:
+		centre_x = int((x + (0.5 * w)))
+		centre_y = int((y + (0.5 * h)))
 
 #Turn on the camera
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(0)	
 
 #Read in the the Classifier for the letter
 letter_A = cv2.CascadeClassifier('A.xml')
@@ -56,101 +20,99 @@ letter_B = cv2.CascadeClassifier('B.xml')
 letter_C = cv2.CascadeClassifier('C.xml')
 letter_D = cv2.CascadeClassifier('D.xml')
 letter_E = cv2.CascadeClassifier('E.xml')
+letter_F = cv2.CascadeClassifier('F.xml')
+letter_G = cv2.CascadeClassifier('G.xml')
 
-mN = 10
+#mN = int(raw_input('Enter number of minNeighbors: '))
+mN = []
+zeroth = []
+stage = []
+q = 0
+apple = 0
 
-
-A_count = 0
-B_count = 0
-C_count = 0
-D_count = 0
-E_count = 0
-
-zero_count = [A_count, B_count, C_count, D_count, E_count]
-
-i = 0
-#Run loop using the web camera
-while(True):
-	x = 0
+for a in xrange(7):
+	mN.append(10)
+	zeroth.append(0)
+	stage.append(0)
 	
+
+#Run loop using the web camera
+while(q <= 5):
 	#Read in the image from the webcam
 	ret, img = cap.read()
 
 	#Convert the image in to grayscale
 	gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 	gray = cv2.GaussianBlur(gray, (5, 5), 0)
-	edged = cv2.Canny(gray, 20, 100)
-
+	edged = cv2.Canny(gray, 80, 100)
+	
 	#Read in the dimensions of the letter
-	A = letter_A.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=mN)
-	B = letter_B.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=mN)
-	C = letter_C.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=mN)
-	D = letter_D.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=mN)
-	E = letter_E.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=mN)
-
-	pizza = ['A', 'B', 'C',' D', 'E']
-	chips = [A,B,C,D,E]
+	A = letter_A.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=mN[0])
+	B = letter_B.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=mN[1])
+	C = letter_C.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=mN[2])
+	D = letter_D.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=mN[3])
+	E = letter_E.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=mN[4])
+	F = letter_F.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=mN[5])
+	G = letter_G.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=mN[6])
 	
-	zeroth = []
+	pizza = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+	beer = [A,B,C,D,E,F,G]
+	party = zip(pizza, beer)
 	
-
-	
-	while (i<1):
-		
-		j = 0
+	#Step 1 - determine the lettes		
+	i = 0
+	while (i<10):
 		k = 0
-		
-		for letters in chips:
-		
-			#mask = []
-			#ratio = img.shape[0] / 300.0
-			#orig = img.copy()
-			#img = imutils.resize(img, height = 300)
-
-			gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-			gray = cv2.GaussianBlur(gray, (5, 5), 0)
-			edged = cv2.Canny(gray, 20, 100)
-	
-	
-	
-			if len(letters) != 0:
-				for (x,y,w,h) in letters:
-			
-					#rect_coor = [(x,y),(x+w,y-h),(x+w,y+h),(x-w,x+h)]
-					mask = np.zeros(img.shape[:2], dtype = "uint8")
-					
-					bgd = np.zeros((1,65),np.float64)
-					fgd = np.zeros((1,65),np.float64)
-					
-					rect_1 = (x,y,w,h)
-					cv2.grabCut(img,mask,rect_1,bgd,fgd,5,cv2.GC_INIT_WITH_RECT)
-					
-					mask2 = np.where((mask==2)|(mask==0),0,1).astype('uint8')
-					img = img*mask2[:,:,np.newaxis]
-					
-					
-
-
+		for letters in beer:
+			centre_letter(letters)
 			if len(letters) == 0:
-				zeroth.append(k)
-				
+				zeroth[k] += 1
 			else:
-				zeroth.append(0)
-				
-				
-			j += 1
+				zeroth[k] += 0
 			k += 1
-			
+		x = 1	
 		i += 1
-	plt.imshow(img),plt.colorbar(),plt.show()
-	#print zeroth	
-		#zero_count.sort()
-		#print zero_count
+	
+	new_party = []
+	
+	j = 0
+	for p0 in party:
+		if zeroth[j] != 10:
+			new_party.append(party[j])
+			mN[j] += 5
+		else:
+			mN[j] = mN[j]	
+		j += 1
+	
+	n = 0
+	end_party = []
+	for p1 in new_party:
+		if len(new_party[n][1]) == 1:
+			end_party.append(new_party[n][0])
+		n += 1
+	
+	yay = 0
+	if len(end_party) == 1:
+		print 'Stage %d Letter Found: %s' % (q, end_party[0])
+		for b in pizza:
+			mN[yay] = 10
+			if pizza[yay] == str(end_party[0]):
+				apple += 1
+				stage[yay] = apple
+			else:
+				stage[yay] = 0
+			yay += 1
+		q += 1
+		
 
-	#cv2.imshow('img', img)
-	#print img
-
-
+	
+	'''
+	if len(stage) == 5:
+		for cheese in pizza:
+			stage.count(
+			print stage
+			break
+	'''
 		
 #Close window and turn off the webcam		
 cap.release()
