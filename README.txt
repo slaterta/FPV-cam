@@ -17,7 +17,7 @@ Parameters:
   
 minNeighbors is the parameter that is increased in order to detemine the final accuracy of the letter being recognised.
 
-The problem: The code does always produce the right result. If I hold the letter G up to the camera it will say a B or C is
+The problem: The code does not always produce the right result. If I hold the letter G up to the camera it will say a B or C is
   detected. Is there a way on increasing the accuracy based on my code or will there have to be a different approach to detect
   the right letter?
 
