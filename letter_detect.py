@@ -103,23 +103,21 @@ while(q <= 5):
 	letter_zip = zip(letter_string, letter_detectMultiScale)
 	#Step 1 - determine the lettes		
 	i = 0
-	while (i<10):		
-		k = 0
-		for letters in letter_detectMultiScale:
-			#centre_letter(letters)
-			if len(letters) == 0:
-				detection_score[k] += 1
-			else:
-				detection_score[k] += 0
-			k += 1
-		x = 1	
-		i += 1
+			
+	k = 0
+	for letters in letter_detectMultiScale:
+		#centre_letter(letters)
+		if len(letters) == 0:
+			detection_score[k] += 1
+		else:
+			detection_score[k] += 0
+	
 
 	detected_letters = []
 	
 	j = 0
 	for p0 in letter_zip:
-		if detection_score[j] != 10:
+		if detection_score[j] != 1:
 			detected_letters.append(letter_zip[j])
 			minNeighbors_Array[j] += 5
 		else:
