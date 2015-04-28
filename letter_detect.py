@@ -5,14 +5,13 @@ import pymeanshift as pms
 from pyimagesearch import imutils
 from matplotlib import pyplot as plt
 import os
-'''
+
 def centre_letter(letter_in):
 	for (x,y,w,h) in letter_in:
 		centre_x = int((x + (0.5 * w)))
 		centre_y = int((y + (0.5 * h)))
-	
-	return
-'''
+	return [centre_x, centre_y]
+
 #Turn on the camera
 cap = cv2.VideoCapture(0)	
 
@@ -26,9 +25,8 @@ letter_F = cv2.CascadeClassifier('F.xml')
 letter_G = cv2.CascadeClassifier('G.xml')
 letter_H = cv2.CascadeClassifier('H.xml')
 letter_I = cv2.CascadeClassifier('I.xml')
-'''
 letter_J = cv2.CascadeClassifier('J.xml')
-letter_K = cv2.CascadeClassifier('K.xml')
+#letter_K = cv2.CascadeClassifier('K.xml')
 letter_L = cv2.CascadeClassifier('L.xml')
 letter_M = cv2.CascadeClassifier('M.xml')
 letter_N = cv2.CascadeClassifier('N.xml')
@@ -44,7 +42,6 @@ letter_W = cv2.CascadeClassifier('W.xml')
 letter_X = cv2.CascadeClassifier('X.xml')
 letter_Y = cv2.CascadeClassifier('Y.xml')
 letter_Z = cv2.CascadeClassifier('Z.xml')
-'''
 
 #mN = int(raw_input('Enter number of minNeighbors: '))
 minNeighbors_Array = []
@@ -53,7 +50,7 @@ detection_score = []
 q = 0
 
 
-for a in xrange(9):
+for a in xrange(25):
 	minNeighbors_Array.append(10)
 	detection_score.append(0)
 	#stage.append(0)
@@ -65,8 +62,8 @@ while(q <= 5):
 	ret, img = cap.read()
 
 	#Convert the image in to grayscale
-	gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-	gray = cv2.GaussianBlur(gray, (5, 5), 0)
+	gray_1 = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+	gray = cv2.GaussianBlur(gray_1, (5, 5), 0)
 	edged = cv2.Canny(gray, 80, 100)
 	
 	#Read in the dimensions of the letter
@@ -79,39 +76,35 @@ while(q <= 5):
 	G = letter_G.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=minNeighbors_Array[6])
 	H = letter_H.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=minNeighbors_Array[7])
 	I = letter_I.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=minNeighbors_Array[8])
-	'''
-	J = letter_J.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=mN[9])
-	K = letter_K.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=mN[10])
-	L = letter_L.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=mN[11])
-	M = letter_M.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=mN[12])
-	N = letter_N.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=mN[13])
-	O = letter_O.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=mN[14])
-	P = letter_P.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=mN[15])
-	Q = letter_Q.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=mN[16])
-	R = letter_R.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=mN[17])
-	S = letter_S.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=mN[18])
-	T = letter_T.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=mN[19])
-	U = letter_U.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=mN[20])
-	V = letter_V.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=mN[21])
-	W = letter_W.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=mN[22])
-	X = letter_X.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=mN[23])
-	Y = letter_Y.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=mN[24])
-	Z = letter_Z.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=mN[25])
-	'''
-	letter_string = ['A','B','C','D','E','F','G','H','I'] #,'I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
-	letter_detectMultiScale = [A,B,C,D,E,F,G,H,I] 	#,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z]
+	J = letter_J.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=minNeighbors_Array[9])
+	#K = letter_K.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=minNeighbors_Array[10])
+	L = letter_L.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=minNeighbors_Array[10])
+	M = letter_M.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=minNeighbors_Array[11])
+	N = letter_N.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=minNeighbors_Array[12])
+	O = letter_O.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=minNeighbors_Array[13])
+	P = letter_P.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=minNeighbors_Array[14])
+	Q = letter_Q.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=minNeighbors_Array[15])
+	R = letter_R.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=minNeighbors_Array[16])
+	S = letter_S.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=minNeighbors_Array[17])
+	T = letter_T.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=minNeighbors_Array[18])
+	U = letter_U.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=minNeighbors_Array[19])
+	V = letter_V.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=minNeighbors_Array[20])
+	W = letter_W.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=minNeighbors_Array[21])
+	X = letter_X.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=minNeighbors_Array[22])
+	Y = letter_Y.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=minNeighbors_Array[23])
+	Z = letter_Z.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=minNeighbors_Array[24])
+
+	letter_string = ['A','B','C','D','E','F','G','H','I','J','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
+	letter_detectMultiScale = [A,B,C,D,E,F,G,H,I,J,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z]
 	letter_zip = zip(letter_string, letter_detectMultiScale)
 	#Step 1 - determine the lettes		
-	i = 0
-			
+		
 	k = 0
 	for letters in letter_detectMultiScale:
 		#centre_letter(letters)
 		if len(letters) == 0:
 			detection_score[k] += 1
-		else:
-			detection_score[k] += 0
-	
+		k += 1
 
 	detected_letters = []
 	
@@ -121,7 +114,9 @@ while(q <= 5):
 			detected_letters.append(letter_zip[j])
 			minNeighbors_Array[j] += 5
 		else:
-			minNeighbors_Array[j] = minNeighbors_Array[j]	
+			minNeighbors_Array[j] -= 5
+			if minNeighbors_Array[j] <= 1:
+				minNeighbors_Array[j] = 1
 		j += 1
 	
 	n = 0
@@ -133,7 +128,7 @@ while(q <= 5):
 	
 	if len(final_detection) == 1:
 		print 'Stage %d Letter Found: %s' % (q, final_detection[0])
-		print mN
+		print minNeighbors_Array
 		#for b in :
 			#mN[yay] = 10
 		q += 1
